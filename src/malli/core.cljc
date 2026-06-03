@@ -155,11 +155,12 @@
 
 #?(:clj (defmethod print-method ::into-schema [v ^java.io.Writer w] (.write w (str "#IntoSchema {:type " (pr-str (-type ^IntoSchema v)) "}"))))
 #?(:clj (defmethod print-method ::schema [v ^java.io.Writer w] (.write w (pr-str (-form ^Schema v)))))
-#?(:cljs (defn -pr-writer-into-schema [obj writer opts]
-           (-write writer "#IntoSchema ")
-           (-pr-writer {:type (-type ^IntoSchema obj)} writer opts)))
-#?(:cljs (defn -pr-writer-schema [obj writer opts]
-           (-pr-writer (-form ^Schema obj) writer opts)))
+;; nbb 1.4.206 compatibility: SCI (esp. on Bun) does not expose cljs.core/-pr-writer
+;; (added to nbb in 1.4.207). Use -write + pr-str instead of recursing through -pr-writer.
+#?(:cljs (defn -pr-writer-into-schema [obj writer _opts]
+           (-write writer (str "#IntoSchema {:type " (pr-str (-type ^IntoSchema obj)) "}"))))
+#?(:cljs (defn -pr-writer-schema [obj writer _opts]
+           (-write writer (pr-str (-form ^Schema obj)))))
 
 (defrecord Tag [key value])
 
