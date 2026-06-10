@@ -52,8 +52,8 @@
           (-set [this key value] (m/-set-assoc-children this key value))
           m/ParserInfo
           (-parser-info [_ _] {:simple-parser true})
-          #?@(:cljs [IPrintWithWriter (-pr-writer [this writer opts] (m/-pr-writer-schema this writer opts))]))))
-    #?@(:cljs [IPrintWithWriter (-pr-writer [this writer opts] (m/-pr-writer-into-schema this writer opts))])))
+          #?@(:org.babashka/nbb [] :cljs [IPrintWithWriter (-pr-writer [this writer opts] (m/-pr-writer-schema this writer opts))]))))
+    #?@(:org.babashka/nbb [] :cljs [IPrintWithWriter (-pr-writer [this writer opts] (m/-pr-writer-into-schema this writer opts))])))
 
 (defn schemas []
   {:validate (-validate-schema)})
